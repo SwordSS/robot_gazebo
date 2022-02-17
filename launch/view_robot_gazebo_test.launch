@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find robot_gazebo)/launch/view_robot_gazebo.launch">
+        <arg name="robot_type" default="laser"/> <!--laser or kinect-->
+    </include>
+</launch>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sensor_link">
+
+    <xacro:property name="sensor_link_radius" value="0.01"/>
+    <!--接口说明(函数变量)
+        prefix      sensor_link前缀
+        base_length 车体厚度，建议值0.16
+        postion_x   sensor_link底部相对于base平面中心的x方向坐标
+        postion_y   sensor_link底部相对于base平面中心的y方向坐标  
+        postion_z   sensor_link底部相对于base平面中心的z方向坐标，亦为sensor_link长度,建议值大于0，0会报错
+
+        接口说明(缺省变量)
+        sensor_link_radius sensor_link的半径，建议值0.01
+    -->
+    <xacro:macro name="sensor_link" params="prefix
+                                            base_length 
+                                            postion_x 
+                                            postion_y 
+                                            postion_z  ">
+
+        <joint name="${prefix}_link_joint" type="fixed">
+            <origin xyz="${postion_x} ${postion_y} ${base_length/2+postion_z/2}" rpy="0 0 0" />
+            <parent link="base_link"/>
+            <child link="${prefix}_link"/>
+        </joint>
+
+        <link name="${prefix}_link">
+            <inertial>
+                <mass value="0.000" />
+                <origin xyz="0 0 0" />
+                <inertia ixx="0.01" ixy="0.0" ixz="0.0"
+                         iyy="0.01" iyz="0.0"
+                         izz="0.01" />
+            </inertial>
+
+            <visual>
+                <origin xyz=" 0 0 0 " rpy="0 0 0" />
+                <geometry>
+                    <cylinder length="${postion_z}" radius="${sensor_link_radius}"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+                <geometry>
+                    <cylinder length="${postion_z}" radius="${sensor_link_radius}"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="${prefix}_link">
+            <material>Gazebo/GreyTransparent</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

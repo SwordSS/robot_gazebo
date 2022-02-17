@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="base_interface" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find robot_gazebo)/description/base/base.xacro" />
+
+    <xacro:property name="wheel_offsety" value="0.00"/>
+    <xacro:property name="caster_offsetx" value="0.02"/>
+    <xacro:property name="base_mass" value="20"/>
+    <xacro:property name="wheel_mass" value="2"/>
+    <xacro:property name="caster_mass" value="0.5"/>
+
+    <!--接口说明(函数变量)
+        base_radius    车体半径，建议值0.2
+        base_length    车体厚度，建议值0.16
+        base_clearance 车体离地间隙，建议值0.03
+        wheel_radius   驱动轮半径，建议值0.06  
+        wheel_length   驱动轮厚度，建议值0.025
+
+        接口说明(缺省变量)
+        wheel_offsety  驱动轮相对于base_link的y方向偏置，建议值0.00
+        caster_offsetx 从动轮相对于base_link的x方向偏置，建议值0.02
+        base_mass      base的质量，建议值20
+        wheel_mass     驱动轮的质量，建议值2
+        caster_mass    从动轮的质量，建议值0.5
+    -->
+    <xacro:macro name="base_interface"  params="base_radius
+                                                base_length
+                                                base_clearance
+                                                wheel_radius
+                                                wheel_length">
+        <base  base_mass="${base_mass}" base_radius="${base_radius}" base_length="${base_length}" base_clearance="${base_clearance}"/>
+        <wheel prefix="left"   wheel_joint_y="${-(base_radius-wheel_offsety)}" wheel_mass="${wheel_mass}"  wheel_radius="${wheel_radius}" wheel_length="${wheel_length}"  base_length="${base_length}" base_clearance="${base_clearance}"/>
+        <wheel prefix="right"  wheel_joint_y="${base_radius-wheel_offsety}"  wheel_mass="${wheel_mass}"  wheel_radius="${wheel_radius}" wheel_length="${wheel_length}"  base_length="${base_length}" base_clearance="${base_clearance}"/>
+        <caster prefix="front" caster_joint_x="${base_radius-caster_offsetx}"    caster_mass="${caster_mass}"  base_length="${base_length}" base_clearance="${base_clearance}"/>
+        <caster prefix="back"  caster_joint_x="${-(base_radius-caster_offsetx)}" caster_mass="${caster_mass}"  base_length="${base_length}" base_clearance="${base_clearance}"/>
+    </xacro:macro>
+</robot>

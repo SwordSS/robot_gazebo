@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<robot name="lms511" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="laser_length" value="0.05"/>
+    <xacro:property name="laser_radius" value="0.05"/>
+    <xacro:property name="update_rate" value="10"/>
+    <xacro:property name="visualize" value="true"/>
+    <xacro:property name="min_angle" value="-3"/>
+    <xacro:property name="max_angle" value="3"/>
+    <xacro:property name="min_range" value="0.1"/>
+    <xacro:property name="max_range" value="6.0"/>
+    <xacro:property name="noise_mean" value="0.00"/>
+    <xacro:property name="noise_sttdev" value="0.01"/>
+
+    <xacro:macro name="lms511" params="postion_z
+                                        rotation_r 
+                                        rotation_p 
+                                        rotation_y ">
+    <!-- lidar -->
+    <joint name="lidar_joint" type="fixed">
+        <origin xyz="0 0 ${postion_z+0.15}" rpy="${rotation_r} ${rotation_p} ${rotation_y}"/>
+        <parent link="laser_link"/>
+        <child link="laser"/>
+    </joint>
+
+    <link name="laser">
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <!-- <cylinder radius="${lidar_radius}" length = "${lidar_length}"/> -->
+            <mesh filename="package://robot_gazebo/description/sensor/lidar/lms511/LMS5xx_small.dae" />
+        </geometry>
+        </collision>
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <!-- <cylinder radius="${lidar_radius}" length = "${lidar_length}"/> -->
+            <mesh filename="package://robot_gazebo/description/sensor/lidar/lms511/LMS5xx_small.dae" />
+        </geometry>
+        <material name="blue" >
+            <color rgba="0 0 1 1" />
+        </material>
+        </visual>
+        <inertial>
+        <mass value="3.7" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.019300857777" ixy="0.0" ixz="0.0" iyy="0.0197151166182" iyz="0.0" izz="0.0152300519173"/>
+        </inertial>
+    </link>
+
+    <!-- lidar gazebo plugin-->
+    <gazebo reference="laser">
+        <sensor type="ray" name="lidar_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>50</update_rate>
+        <ray>
+            <scan>
+            <horizontal>
+                <samples>360</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle}</min_angle>
+                <max_angle>${max_angle}</max_angle>
+            </horizontal>
+            </scan>
+            <range>
+            <min>${min_range}</min>
+            <max>${max_range}</max>
+            <resolution>0.01</resolution>
+            </range>
+            <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+            </noise>
+        </ray>
+        <plugin name="gazebo_ros_lidar_controller" filename="libgazebo_ros_laser.so">
+            <topicName>/scan</topicName>
+            <frameName>laser</frameName>
+        </plugin>
+        </sensor>
+    </gazebo>
+    </xacro:macro>  
+</robot>
