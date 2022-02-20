@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<robot name="imu" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="imu" params="postion_z
+                                    rotation_r 
+                                    rotation_p 
+                                    rotation_y ">
+
+        <joint name="imu_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="${rotation_r} ${rotation_p} ${rotation_y}"/>
+        <parent link="imu_link"/>
+        <child link="imu"/>
+        </joint>
+
+        <gazebo reference="imu">
+            <material>Gazebo/Black</material>
+        </gazebo>
+
+        <link name="imu">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.02 0.02 0.02" /> 
+            </geometry>
+            <material name="Black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz=" 0 0 0" rpy="0 0 0" />
+                <geometry>
+                <box size="0.02 0.02 0.02" />
+                </geometry>
+            </collision>   
+        <box_inertial_matrix  m="0.1" a="0.02" b="0.02"  c="0.02" />       
+        </link>
+
+        <!-- imu_plugin -->
+        <gazebo reference="imu">
+            <gravity>true</gravity>
+            <sensor name="imu_sensor" type="imu">
+                <always_on>true</always_on>
+                <update_rate>10</update_rate>
+                <visualize>true</visualize>
+                <topic>/imu/data</topic>
+                <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                    <topicName>imu/data</topicName>
+                    <bodyName>base_link</bodyName>
+                    <updateRateHZ>100.0</updateRateHZ>
+                    <gaussianNoise>0.0</gaussianNoise>
+                    <xyzOffset>0 0 0</xyzOffset>
+                    <rpyOffset>0 0 0</rpyOffset>
+                    <frameName>imu</frameName>
+                </plugin>
+                <pose>0 0 0 0 0 0</pose>
+            </sensor>
+        </gazebo>
+    </xacro:macro> 
+</robot>

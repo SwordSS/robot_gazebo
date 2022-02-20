@@ -1,7 +1,7 @@
 <launch>
 
     <!-- 设置launch文件的参数 -->
-    <arg name="world_name" value="$(find robot_gazebo)/worlds/package1/playground.world"/> <!-- 涉及路径 -->
+    <arg name="world_name" value="$(find robot_gazebo)/worlds/package2/willowgarage.world"/> <!-- 涉及路径 -->
     <arg name="paused" default="false"/>
     <arg name="use_sim_time" default="true"/>
     <arg name="gui" default="true"/>
@@ -20,13 +20,8 @@
 
     <!-- 加载机器人模型描述参数 -->
     <arg name="prefix_path" value="$(find robot_gazebo)/description/robot"/> <!-- 涉及路径 -->
-    <arg name="robot_type" default="laser"/> <!--laser or kinect-->
-
-    <!-- lidar -->
-    <group if="$(eval robot_type == 'laser')">
-        <param name="robot_description" command="$(find xacro)/xacro --inorder 
-                                                '$(arg prefix_path)/mbot.xacro'" /> <!-- 涉及路径 -->
-    </group>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder 
+                                            '$(arg prefix_path)/mbot.xacro'" /> <!-- 涉及路径 -->
 
                     
     <!-- 运行robot_state_publisher节点，发布tf  -->
@@ -36,6 +31,6 @@
 
     <!-- 在gazebo中加载机器人模型-->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model mbot -param robot_description"/> 
+          args="-urdf -model mbot -param robot_description -x 0.0 -y 0.0 -z 0.0"/> 
 
 </launch>

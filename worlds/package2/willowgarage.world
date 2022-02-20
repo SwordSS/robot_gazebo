@@ -4,14 +4,14 @@
       <cast_shadows>1</cast_shadows>
       <pose frame=''>0 0 10 0 -0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
+      <specular>0.1 0.1 0.1 1</specular>
       <attenuation>
         <range>1000</range>
         <constant>0.9</constant>
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
+      <direction>-0.5 0.5 -1</direction>
     </light>
     <model name='ground_plane'>
       <static>1</static>
@@ -56,8 +56,8 @@
           </material>
         </visual>
         <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
+        <gravity>1</gravity>
       </link>
     </model>
     <gravity>0 0 -9.8</gravity>
@@ -73,7 +73,6 @@
       <background>0.7 0.7 0.7 1</background>
       <shadows>1</shadows>
     </scene>
-    <wind/>
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
       <latitude_deg>0</latitude_deg>
@@ -81,16 +80,15 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='iscas_museum'>
-      <link name='link'>
-        <inertial>
-          <mass>15</mass>
-        </inertial>
+    <model name='willowgarage'>
+      <static>1</static>
+      <pose frame=''>-8.07896 -2.97914 0 0 -0 0</pose>
+      <link name='walls'>
         <collision name='collision'>
-          <pose frame=''>0 0 0 0 0 -1.57</pose>
           <geometry>
             <mesh>
-              <uri>model://iscas_museum/meshes/ISCAS_museum.dae</uri>
+              <uri>model://willowgarage/meshes/willowgarage_collision.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -108,25 +106,24 @@
           </surface>
         </collision>
         <visual name='visual'>
-          <pose frame=''>0 0 0 0 0 -1.57</pose>
           <geometry>
             <mesh>
-              <uri>model://iscas_museum/meshes/ISCAS_museum.dae</uri>
+              <uri>model://willowgarage/meshes/willowgarage_visual.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
+          <cast_shadows>0</cast_shadows>
         </visual>
         <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
+        <gravity>1</gravity>
       </link>
-      <static>1</static>
-      <pose frame=''>0.173241 0.727374 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>134 934000000</sim_time>
-      <real_time>136 38997708</real_time>
-      <wall_time>1627434080 249085424</wall_time>
-      <iterations>134934</iterations>
+      <sim_time>99 237000000</sim_time>
+      <real_time>99 639423829</real_time>
+      <wall_time>1645339840 75267167</wall_time>
+      <iterations>99237</iterations>
       <model name='ground_plane'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -137,11 +134,11 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='iscas_museum'>
-        <pose frame=''>0.173241 0.727374 0 0 -0 0</pose>
+      <model name='willowgarage'>
+        <pose frame=''>-8.44982 -2.85346 0 0 -0 0</pose>
         <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>0.173241 0.727374 0 0 -0 0</pose>
+        <link name='walls'>
+          <pose frame=''>-8.44982 -2.85346 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -153,7 +150,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>2.47403 -22.8235 33.5006 0 0.943643 1.5562</pose>
+        <pose frame=''>24.2512 -7.90125 53.6296 0 1.2018 1.5922</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

@@ -2,6 +2,7 @@
 <robot name="mbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:include filename="$(find robot_gazebo)/description/base/base_interface.xacro" />
     <xacro:include filename="$(find robot_gazebo)/description/sensor/sensor_link/sensor_link.xacro" />
+    <xacro:include filename="$(find robot_gazebo)/description/sensor/imu/imu.xacro" />
     <xacro:include filename="$(find robot_gazebo)/description/sensor/lidar/rplidar/rplidar.xacro" />
 
     <!--接口说明(函数变量)
@@ -30,6 +31,7 @@
         接口说明(缺省变量)
         sensor_link_radius sensor_link的半径，建议值0.01
     -->
+    <sensor_link prefix="imu"  base_length="0.0" postion_x="0.0" postion_y="0" postion_z="0.001"/>
     <sensor_link prefix="laser"  base_length="0.16" postion_x="0.1" postion_y="0" postion_z="0.05"/>
 
     <!--接口说明(函数变量)
@@ -49,6 +51,7 @@
         noise_mean        激光数据的高斯噪声均值，建议0.0
         noise_sttdev      激光数据的高斯噪声方差，建议0.01
     -->
+    <xacro:imu postion_z="0.001" rotation_r="0" rotation_p="0" rotation_y="0" /> 
     <xacro:rplidar postion_z="0.05" rotation_r="0" rotation_p="0" rotation_y="0" /> 
 
 </robot>
