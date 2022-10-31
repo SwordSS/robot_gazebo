@@ -13,7 +13,7 @@
     <xacro:property name="noise_sttdev" value="0.01"/>
 
     <!--接口说明(函数变量)
-        postion_z   laser底部相对于base平面中心的z方向坐标，建议值大于0，0会报错
+        position_z   laser底部相对于base平面中心的z方向坐标，建议值大于0，0会报错
         rotation_r  laser底部相对于base平面中心的roll
         rotation_p  laser底部相对于base平面中心的pitch
         rotation_y  laser底部相对于base平面中心的yaw
@@ -31,18 +31,18 @@
         
         一般需要修改获取到的传感器文件几处地方，parent_link,joint的origin和rpy，传感器插件变量
     -->
-    <xacro:macro name="rplidar" params="postion_z
+    <xacro:macro name="rplidar" params="position_z
                                         rotation_r 
                                         rotation_p 
                                         rotation_y ">
 
         <joint name="laser_joint" type="fixed">
-            <origin xyz="0 0 ${postion_z/2+laser_length/2}" rpy="${rotation_r} ${rotation_p} ${rotation_y}" />
+            <origin xyz="0 0 ${position_z/2+laser_length/2}" rpy="${rotation_r} ${rotation_p} ${rotation_y}" />
             <parent link="laser_link"/>
-            <child link="laser"/>
+            <child link="base_scan"/>
         </joint>
 
-        <link name="laser">
+        <link name="base_scan">
             <inertial>
                 <mass value="0.01" />
                 <origin xyz="0 0 0" />
@@ -66,11 +66,11 @@
             </collision>
         </link> 
 
-        <gazebo reference="laser">
+        <gazebo reference="base_scan">
             <material>Gazebo/Black</material>
         </gazebo>
 
-        <gazebo reference="laser">
+        <gazebo reference="base_scan">
             <sensor type="ray" name="rplidar">
                 <pose>0 0 0 0 0 0</pose>
                 <visualize>${visualize}</visualize>
@@ -97,7 +97,7 @@
                 </ray>
                 <plugin name="gazebo_rplidar" filename="libgazebo_ros_laser.so">
                     <topicName>/scan</topicName>
-                    <frameName>laser</frameName>
+                    <frameName>base_scan</frameName>
                 </plugin>
             </sensor>
         </gazebo> 

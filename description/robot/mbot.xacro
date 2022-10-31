@@ -4,6 +4,7 @@
     <xacro:include filename="$(find robot_gazebo)/description/sensor/sensor_link/sensor_link.xacro" />
     <xacro:include filename="$(find robot_gazebo)/description/sensor/imu/imu.xacro" />
     <xacro:include filename="$(find robot_gazebo)/description/sensor/lidar/rplidar/rplidar.xacro" />
+    <xacro:include filename="$(find robot_gazebo)/description/sensor/lidar/velodyne/VLP-16.urdf.xacro" />
 
     <!--接口说明(函数变量)
         base_radius    车体半径，建议值0.2
@@ -24,18 +25,19 @@
     <!--接口说明(函数变量)
         prefix      sensor_link前缀
         base_length 车体厚度，建议值0.16
-        postion_x   sensor_link底部相对于base平面中心的x方向坐标
-        postion_y   sensor_link底部相对于base平面中心的y方向坐标  
-        postion_z   sensor_link底部相对于base平面中心的z方向坐标，亦为sensor_link长度,建议值大于0，0会报错
+        position_x   sensor_link底部相对于base平面中心的x方向坐标
+        position_y   sensor_link底部相对于base平面中心的y方向坐标  
+        position_z   sensor_link底部相对于base平面中心的z方向坐标，亦为sensor_link长度,建议值大于0，0会报错
 
         接口说明(缺省变量)
         sensor_link_radius sensor_link的半径，建议值0.01
     -->
-    <sensor_link prefix="imu"  base_length="0.0" postion_x="0.0" postion_y="0" postion_z="0.001"/>
-    <sensor_link prefix="laser"  base_length="0.16" postion_x="0.1" postion_y="0" postion_z="0.05"/>
+    <sensor_link prefix="imu"  base_length="0.0" position_x="0.0" position_y="0" position_z="0.001"/>
+    <!-- <sensor_link prefix="laser"  base_length="0.16" position_x="0.1" position_y="0" position_z="0.05"/> -->
+    <sensor_link prefix="velodyne"  base_length="0.16" position_x="0.1" position_y="0" position_z="1.0"/>
 
     <!--接口说明(函数变量)
-        postion_z   laser底部相对于base平面中心的z方向坐标，建议值大于0，0会报错
+        position_z   laser底部相对于base平面中心的z方向坐标，建议值大于0，0会报错
         rotation_r  laser底部相对于base平面中心的roll
         rotation_p  laser底部相对于base平面中心的pitch
         rotation_y  laser底部相对于base平面中心的yaw
@@ -51,7 +53,16 @@
         noise_mean        激光数据的高斯噪声均值，建议0.0
         noise_sttdev      激光数据的高斯噪声方差，建议0.01
     -->
-    <xacro:imu postion_z="0.001" rotation_r="0" rotation_p="0" rotation_y="0" /> 
-    <xacro:rplidar postion_z="0.05" rotation_r="0" rotation_p="0" rotation_y="0" /> 
+    <xacro:imu position_z="0.001" rotation_r="0" rotation_p="0" rotation_y="0" /> 
+    <!-- <xacro:rplidar position_z="0.05" rotation_r="0" rotation_p="0" rotation_y="0" /> -->
+
+    <!-- here z must be half of position_z-->
+    <xacro:arg name="gpu" default="false"/>
+    <xacro:property name="gpu" value="$(arg gpu)" />
+    <xacro:arg name="organize_cloud" default="false"/>
+    <xacro:property name="organize_cloud" value="$(arg organize_cloud)" />
+    <xacro:VLP-16 parent="velodyne_link" name="velodyne" topic="/velodyne_points" organize_cloud="${organize_cloud}" hz="10" samples="1800" gpu="${gpu}">
+        <origin xyz="0 0 0.5" rpy="0 0 0" /> 
+    </xacro:VLP-16> 
 
 </robot>
